@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Predictor | CareerCompass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            --bg-deep: #020617;
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --border-glow: rgba(255, 255, 255, 0.08);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+        .glassmorphism {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+        }
+        .sidebar-item {
+            transition: all 0.3s ease;
+            position: relative;
+            color: #94a3b8;
+        }
+        .sidebar-item:hover, .sidebar-item.active {
+            background: rgba(99, 102, 241, 0.12);
+            color: #c7d2fe;
+        }
+        .btn-glow {
+            transition: all 0.3s ease;
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+<body class="flex">
+
+    <aside class="sidebar w-72 fixed h-full glassmorphism border-r border-white/5 hidden lg:block">
+        <div class="p-10">
+            <h1 class="text-2xl font-black tracking-tighter text-white">CareerCompass</h1>
+        </div>
+        <nav class="mt-4 px-6 space-y-2">
+            <a href="/homePage" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Overview</span>
+            </a>
+            <a href="/predictor" class="sidebar-item active flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="trending-up" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Salary Predictor</span>
+            </a>
+            <a href="/matcher" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="briefcase" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Job Matcher</span>
+            </a>
+            <a href="/analyzer" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="file-text" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Resume Analyzer</span>
+            </a>
+            <a href="/trends" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="users" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Market Trends</span>
+            </a>
+        </nav>
+
+        <div class="absolute bottom-10 left-0 w-full px-6 space-y-2">
+            <a href="settings.html" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="settings" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Settings</span>
+            </a>
+            <a href="/api/auth/logout" class="sidebar-item flex items-center px-4 py-4 rounded-2xl text-red-400/80 hover:text-red-400 hover:bg-red-400/5">
+                <i data-lucide="log-out" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-grow lg:ml-72 min-h-screen p-8 lg:p-12">
+        
+        <header class="mb-12">
+            <h2 class="text-indigo-400 font-black uppercase tracking-[0.2em] text-[10px] mb-2">Dataset-Driven Core ML Engine</h2>
+            <h3 class="text-4xl font-black tracking-tight text-white">Salary Compensation Predictor</h3>
+        </header>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            
+            <div class="xl:col-span-2 glassmorphism p-8 rounded-[2.5rem]">
+                <h4 class="text-lg font-black text-white mb-6 flex items-center">
+                    <i data-lucide="sliders" class="text-indigo-400 mr-3 w-5 h-5"></i> Profile Parameters
+                </h4>
+                
+                <form id="salaryPredictorForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div>
+                            <label class="block text-slate-400 text-xs font-black uppercase tracking-wider mb-2">Target Designation / Designation</label>
+                            <select id="job_title" class="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                                <option value="AI Engineer">AI Engineer</option>
+                                <option value="Backend Developer">Backend Developer</option>
+                                <option value="Business Analyst">Business Analyst</option>
+                                <option value="Cloud Engineer">Cloud Engineer</option>
+                                <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                                <option value="Data Analyst">Data Analyst</option>
+                                <option value="Data Scientist">Data Scientist</option>
+                                <option value="DevOps Engineer">DevOps Engineer</option>
+                                <option value="Frontend Developer">Frontend Developer</option>
+                                <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+                                <option value="Product Manager">Product Manager</option>
+                                <option value="Software Engineer">Software Engineer</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 text-xs font-black uppercase tracking-wider mb-2">Target Market Sector / Industry</label>
+                            <select id="industry" class="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                                <option value="Consulting">Consulting</option>
+                                <option value="Education">Education</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Government">Government</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Manufacturing">Manufacturing</option>
+                                <option value="Media">Media</option>
+                                <option value="Retail">Retail</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Telecom">Telecom</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 text-xs font-black uppercase tracking-wider mb-2">Experience (Years)</label>
+                            <input type="number" id="experience_years" min="0" max="45" value="3" required
+                                class="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-slate-400 text-xs font-black uppercase tracking-wider mb-2">Total Skills Profile Count</label>
+                            <input type="number" id="skills_count" min="1" max="50" value="8" required
+                                class="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 text-xs font-black uppercase tracking-wider mb-2">Education Level</label>
+                            <select id="education_level" class="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                                <option value="High School">High School</option>
+                                <option value="Diploma">Diploma</option>
+                                <option value="Bachelor">Bachelor Degree</option>
+                                <option value="Master">Master Degree</option>
+                                <option value="PhD">PhD / Doctorate</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 text-xs font-black uppercase tracking-wider mb-2">Base Corporate Location</label>
+                            <select id="location" class="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                                <option value="Australia">Australia</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Germany">Germany</option>
+                                <option value="India">India</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="Remote">Remote (Global)</option>
+                                <option value="Singapore">Singapore</option>
+                                <option value="Sweden">Sweden</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="USA">United States</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 text-xs font-black uppercase tracking-wider mb-2">Target Enterprise Size</label>
+                            <select id="company_size" class="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                                <option value="Startup">Early Startup</option>
+                                <option value="Small">Small Scale Business</option>
+                                <option value="Medium">Medium Scale Tier</option>
+                                <option value="Large">Large Organization</option>
+                                <option value="Enterprise">Global Conglomerate / Enterprise</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 text-xs font-black uppercase tracking-wider mb-2">Remote Operational Work Model</label>
+                            <select id="remote_work" class="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                                <option value="No">No (On-Site Office)</option>
+                                <option value="Hybrid">Hybrid Office Framework</option>
+                                <option value="Yes">Yes (100% Remote)</option>
+                            </select>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-slate-400 text-xs font-black uppercase tracking-wider mb-2">Industry Certifications Total</label>
+                            <input type="number" id="certifications" min="0" max="15" value="2" required
+                                class="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all btn-glow shadow-lg shadow-indigo-900/40">
+                        Evaluate Expected Compensation Package
+                    </button>
+                </form>
+            </div>
+
+            <div class="glassmorphism p-8 rounded-[2.5rem] flex flex-col justify-between h-fit min-h-[440px]">
+                <div>
+                    <h4 class="text-lg font-black text-white mb-2 flex items-center">
+                        <i data-lucide="pie-chart" class="text-emerald-400 mr-3 w-5 h-5"></i> Predictive Feedback
+                    </h4>
+                    <p class="text-xs text-slate-500 font-medium mb-12">Calculated directly via the isolated 97% accuracy multi-feature dataset engine.</p>
+                    
+                    <div class="text-center py-14 rounded-[2rem] bg-slate-900/40 border border-white/5">
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 block mb-3">Calculated Base Market Value</span>
+                        <h3 id="predictedValueOutput" class="text-3xl font-black text-indigo-400 px-4">$--,---</h3>
+                    </div>
+                </div>
+                
+                <div class="mt-8 p-4 bg-indigo-600/5 border border-indigo-500/10 rounded-2xl text-[11px] text-slate-400 leading-relaxed font-semibold flex items-start">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-indigo-400 mr-2 flex-shrink-0"></i>
+                    <span>This data point aligns feature variables across clean structural signals to yield fine-grained value predictions.</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('salaryPredictorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let displayTarget = document.getElementById('predictedValueOutput');
+            displayTarget.innerText = "Evaluating Vector...";
+            displayTarget.className = "text-xl font-black text-slate-500 animate-pulse";
+            
+            // Format form payloads
+            let payload = {
+                job_title: document.getElementById('job_title').value,
+                experience_years: parseInt(document.getElementById('experience_years').value),
+                education_level: document.getElementById('education_level').value,
+                skills_count: parseInt(document.getElementById('skills_count').value),
+                industry: document.getElementById('industry').value,
+                company_size: document.getElementById('company_size').value,
+                location: document.getElementById('location').value,
+                remote_work: document.getElementById('remote_work').value,
+                certifications: parseInt(document.getElementById('certifications').value)
+            };
+
+            fetch('/predict-salary-form', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.error) {
+                    displayTarget.innerText = "Error Computing";
+                    displayTarget.className = "text-lg font-black text-red-400";
+                    return;
+                }
+                // Update text container to predicted currency value
+                displayTarget.innerText = data.predicted_salary;
+                displayTarget.className = "text-3xl font-black text-emerald-400 transition-all";
+            })
+            .catch(error => {
+                console.error("Inference Pipeline Crash Context:", error);
+                displayTarget.innerText = "Server Error";
+                displayTarget.className = "text-lg font-black text-red-400";
+            });
+        });
+    </script>
+</body>
+</html>

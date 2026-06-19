@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | CareerCompass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            --bg-deep: #020617; /* Deepest Slate */
+            --accent-glow: rgba(99, 102, 241, 0.15);
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --border-glow: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(30, 58, 138, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        .glassmorphism {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(10, 15, 30, 0.8);
+        }
+
+        .sidebar-item {
+            transition: all 0.3s ease;
+            position: relative;
+            color: #94a3b8;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background: rgba(99, 102, 241, 0.12);
+            color: #c7d2fe;
+        }
+
+        .sidebar-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15%;
+            height: 70%;
+            width: 3px;
+            background: #6366f1;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.8);
+        }
+
+        .action-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            cursor: pointer;
+        }
+
+        .action-card:hover {
+            transform: translateY(-8px);
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .stats-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.2));
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        .btn-glow {
+            box-shadow: 0 0 0 rgba(99, 102, 241, 0);
+            transition: all 0.3s ease;
+        }
+        .btn-glow:hover { box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
+    </style>
+</head>
+<body class="flex">
+
+    <button id="mobile-toggle" class="lg:hidden fixed bottom-6 right-6 z-[100] bg-indigo-600 p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-transform">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+
+    <aside id="sidebar" class="sidebar lg:w-72 fixed h-full z-50 glassmorphism border-r border-white/5 -translate-x-full lg:translate-x-0">
+        <div class="p-10">
+            <h1 class="text-2xl font-black tracking-tighter flex items-center group cursor-pointer">
+                CareerCompass
+            </h1>
+        </div>
+
+        <nav class="mt-4 px-6 space-y-2">
+            <a href="/homePage" class="sidebar-item active flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Overview</span>
+            </a>
+            <a href="/predictor" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="trending-up" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Salary Predictor</span>
+            </a>
+            <a href="/matcher" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="briefcase" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Job Matcher</span>
+            </a>
+            <a href="/analyzer" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="file-text" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Resume Analyzer</span>
+            </a>
+            <a href="/trends" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="users" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Market Trends</span>
+            </a>
+        </nav>
+
+        <div class="absolute bottom-10 left-0 w-full px-6 space-y-2">
+            <a href="/settings" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="settings" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Settings</span>
+            </a>
+            <a href="/api/auth/logout" class="sidebar-item flex items-center px-4 py-4 rounded-2xl text-red-400/80 hover:text-red-400 hover:bg-red-400/5">
+                <i data-lucide="log-out" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-grow lg:ml-72 min-h-screen">
+        
+        <header class="p-8 lg:p-12 flex justify-between items-center relative z-30">
+            <div data-aos="fade-right">
+                <h2 class="text-indigo-400/80 font-black uppercase tracking-[0.2em] text-[10px] mb-2">AI Career Engine v2.0</h2>
+                <h3 class="text-4xl font-black tracking-tight text-white">Welcome Back, <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">{{ name }}</span> 👋</h3>
+            </div>
+            
+            <div class="flex items-center space-x-6 relative" data-aos="fade-left">
+                <div class="relative inline-block text-left">
+                    <button id="notification-btn" class="bg-white/5 p-3 rounded-2xl hover:bg-white/10 transition border border-white/5 relative z-20 focus:outline-none">
+                        <i data-lucide="bell" class="w-5 h-5 text-gray-400"></i>
+                        <span id="notification-dot" class="absolute top-2.5 right-2.5 w-2 h-2 bg-indigo-500 rounded-full ring-4 ring-slate-900/50"></span>
+                    </button>
+
+                    <div id="notification-dropdown" class="hidden absolute right-0 mt-4 w-80 md:w-96 glassmorphism rounded-2xl border border-white/10 shadow-2xl z-50 p-4 transition-all duration-300 transform scale-95 opacity-0 origin-top-right">
+                        <div class="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
+                            <h5 class="text-xs font-black uppercase tracking-wider text-indigo-400">Workspace Updates</h5>
+                            <button id="mark-read-btn" class="text-[10px] text-slate-400 hover:text-white font-bold uppercase transition">Clear All</button>
+                        </div>
+                        <ul class="space-y-2 max-h-60 overflow-y-auto">
+                            <li class="p-3 bg-slate-900/40 rounded-xl border border-white/5 text-[11px] text-slate-300 leading-relaxed font-medium">
+                                <span class="text-indigo-400 font-bold block mb-0.5">🚀 Core Engine Initialized</span>
+                                Welcome back, <span class="text-white font-semibold">{{ name }}</span>! Your profile is connected under active status parameters (<span class="text-white font-semibold">{{ title }}</span>).
+                            </li>
+                            <li class="p-3 bg-slate-900/40 rounded-xl border border-white/5 text-[11px] text-slate-300 leading-relaxed font-medium">
+                                <span class="text-emerald-400 font-bold block mb-0.5">📊 Market Pulse Signal</span>
+                                The Random Forest Regression Matrix (R²: 0.82) completed a time-series macro simulation pipeline sync.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-5 pl-6 border-l border-white/10">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-white">{{ name }}</p>
+                        <p class="text-[10px] text-indigo-400/70 font-black uppercase tracking-widest">{{ title }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-700 flex items-center justify-center font-black text-white shadow-lg shadow-indigo-900/20 border border-white/10 cursor-pointer hover:scale-105 transition">
+                        {{ name[0] if name else 'U' }}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="px-8 lg:px-12 pb-12 relative z-10">
+
+            <div class="mb-12 glassmorphism p-8 rounded-[2rem] border border-white/10 shadow-2xl" data-aos="fade-up">
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="w-10 h-10 bg-indigo-600/20 text-indigo-400 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-black text-white">Upload New Experience Layer</h4>
+                        <p class="text-xs text-slate-400 font-medium">Analyze fresh candidate profile metrics across active intelligence loops.</p>
+                    </div>
+                </div>
+                <form id="resumeUploadForm" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                    <input type="file" id="resumeFileInput" accept=".pdf,.docx,.txt" required
+                        class="block w-full text-xs text-slate-400 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:tracking-wider file:bg-indigo-600/10 file:text-indigo-300 hover:file:bg-indigo-600/20 file:cursor-pointer bg-slate-950/40 rounded-xl border border-white/5 p-2 focus:outline-none">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs tracking-widest uppercase font-black px-8 py-4 rounded-xl transition-all btn-glow shadow-lg shadow-indigo-900/30 whitespace-nowrap">
+                        Analyze Profile
+                    </button>
+                </form>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16" data-aos="fade-up">
+                <div class="stats-card p-8 rounded-[2.5rem] glassmorphism">
+                    <div class="flex justify-between items-start mb-6">
+                        <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">Estimated Value</p>
+                        <span class="bg-emerald-500/10 text-emerald-400 text-[10px] px-2 py-1 rounded-lg font-bold">LIVE</span>
+                    </div>
+                    <h4 id="salaryDisplay" class="text-3xl font-black text-white mb-2">$105,400</h4>
+                    <p id="salaryTrend" class="text-indigo-400 text-xs font-bold flex items-center">
+                        <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> +12% vs last year
+                    </p>
+                </div>
+                <div class="stats-card p-8 rounded-[2.5rem] glassmorphism">
+                    <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mb-6">Market Readiness</p>
+                    <div class="flex items-end justify-between mb-4">
+                        <h4 id="scoreDisplay" class="text-4xl font-black text-white">88%</h4>
+                        <span id="matchLabel" class="text-indigo-400 text-xs font-bold uppercase tracking-widest">Strong Match</span>
+                    </div>
+                    <div class="w-full bg-slate-800/50 h-2.5 rounded-full overflow-hidden">
+                        <div id="scoreProgressBar" class="bg-gradient-to-r from-indigo-600 to-violet-500 h-full rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)] transition-all duration-700" style="width: 88%"></div>
+                    </div>
+                </div>
+                <div class="stats-card p-8 rounded-[2.5rem] glassmorphism">
+                    <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mb-6">Active Opportunities</p>
+                    <h4 id="opportunitiesCount" class="text-4xl font-black text-indigo-400 mb-2">24</h4>
+                    <p class="text-slate-400 text-xs font-bold">Based on parsed skill matrix profile</p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-10" data-aos="fade-right">
+                <h4 class="text-xl font-black flex items-center text-white">
+                    <span class="bg-indigo-600/20 text-indigo-400 w-12 h-12 rounded-2xl flex items-center justify-center mr-5 border border-indigo-500/20">
+                        <i data-lucide="cpu" class="w-6 h-6"></i>
+                    </span>
+                    Intelligence Toolkit
+                </h4>
+                <div class="h-px flex-grow mx-10 bg-gradient-to-r from-white/10 to-transparent hidden md:block"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-16">
+                <div onclick="window.location.href='/predictor'" class="action-card p-10 rounded-[3rem] flex flex-col items-center text-center group" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="w-20 h-20 rounded-[2rem] bg-indigo-600/10 flex items-center justify-center mb-8 text-indigo-400 group-hover:scale-110 transition-transform border border-indigo-500/10">
+                        <i data-lucide="dollar-sign" class="w-10 h-10"></i>
+                    </div>
+                    <h5 class="text-xl font-bold mb-3 text-white">Salary Predictor</h5>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 font-medium">Data-driven estimation of your market compensation.</p>
+                    <a href="/predictor" class="w-full py-4 rounded-2xl bg-indigo-600/10 hover:bg-indigo-600 text-indigo-100 transition-all font-bold text-xs tracking-[0.15em] uppercase mt-auto btn-glow border border-indigo-500/20">Launch Predictor</a>
+                </div>
+
+                <div onclick="window.location.href='/matcher'" class="action-card p-10 rounded-[3rem] flex flex-col items-center text-center group" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="w-20 h-20 rounded-[2rem] bg-emerald-600/10 flex items-center justify-center mb-8 text-emerald-400 group-hover:scale-110 transition-transform border border-emerald-500/10">
+                        <i data-lucide="fingerprint" class="w-10 h-10"></i>
+                    </div>
+                    <h5 class="text-xl font-bold mb-3 text-white">Job Matcher</h5>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 font-medium">Discover roles that sync with your career DNA.</p>
+                    <a href="/matcher" class="w-full py-4 rounded-2xl bg-emerald-600/10 hover:bg-emerald-600 text-emerald-100 transition-all font-bold text-xs tracking-[0.15em] uppercase mt-auto btn-glow border border-emerald-500/20">Find Matches</a>
+                </div>
+
+                <div onclick="window.location.href='/analyzer'" class="action-card p-10 rounded-[3rem] flex flex-col items-center text-center group" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="w-20 h-20 rounded-[2rem] bg-purple-600/10 flex items-center justify-center mb-8 text-purple-400 group-hover:scale-110 transition-transform border border-purple-500/10">
+                        <i data-lucide="file-text" class="w-10 h-10"></i>
+                    </div>
+                    <h5 class="text-xl font-bold mb-3 text-white">Resume AI</h5>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 font-medium">Deep analysis for maximum recruiter impact.</p>
+                    <a href="/analyzer" class="w-full py-4 rounded-2xl bg-purple-600/10 hover:bg-purple-600 text-purple-100 transition-all font-bold text-xs tracking-[0.15em] uppercase mt-auto btn-glow border border-purple-500/20">Analyze CV</a>
+                </div>
+
+                <div onclick="window.location.href='/trends'" class="action-card p-10 rounded-[3rem] flex flex-col items-center text-center group" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="w-20 h-20 rounded-[2rem] bg-orange-600/10 flex items-center justify-center mb-8 text-orange-400 group-hover:scale-110 transition-transform border border-orange-500/10">
+                        <i data-lucide="bar-chart-3" class="w-10 h-10"></i>
+                    </div>
+                    <h5 class="text-xl font-bold mb-3 text-white">Market Pulse</h5>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 font-medium">Stay ahead with real-time industry skill trends.</p>
+                    <a href="/trends" class="w-full py-4 rounded-2xl bg-orange-600/10 hover:bg-orange-600 text-orange-100 transition-all font-bold text-xs tracking-[0.15em] uppercase mt-auto btn-glow border border-orange-500/20">View Pulse</a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-16" data-aos="fade-up">
+                <div class="glassmorphism p-8 rounded-[2.5rem] border border-white/5 xl:col-span-1">
+                    <h4 class="text-lg font-black text-white mb-6 flex items-center">
+                        <i data-lucide="message-square-code" class="w-5 h-5 text-indigo-400 mr-3"></i> AI Optimization Advice
+                    </h4>
+                    <ul id="feedbackContainerList" class="space-y-4">
+                        <li class="p-4 bg-slate-900/40 rounded-2xl border border-white/5 text-xs text-slate-400 leading-relaxed font-medium">
+                            No resume uploaded yet. Use the upload area above to receive real-time portfolio optimization feedback.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="glassmorphism p-8 rounded-[2.5rem] border border-white/5 xl:col-span-2">
+                    <div class="flex justify-between items-center mb-6">
+                        <h4 class="text-lg font-black text-white flex items-center">
+                            <i data-lucide="git-branch" class="w-5 h-5 text-emerald-400 mr-3"></i> Top Algorithmic Job Matches
+                        </h4>
+                        <span class="text-[10px] bg-emerald-500/10 text-emerald-400 font-bold uppercase px-3 py-1 rounded-lg tracking-wider">Cosine Proximity Engine</span>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="text-slate-500 uppercase tracking-wider border-b border-white/5">
+                                    <th class="pb-4 font-black">Target Role / Designation</th>
+                                    <th class="pb-4 font-black">Company</th>
+                                    <th class="pb-4 font-black text-end">Alignment Match</th>
+                                </tr>
+                            </thead>
+                            <tbody id="jobMatchesTableBody" class="divide-y divide-white/5">
+                                <tr>
+                                    <td class="py-4 font-bold text-slate-400">---</td>
+                                    <td class="py-4 text-slate-500">---</td>
+                                    <td class="py-4 text-end font-extrabold text-slate-500">0%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <footer class="p-12 text-center text-slate-600 text-[10px] font-black uppercase tracking-[0.4em] opacity-50">
+            &copy; 2026 CareerCompass • Precision Intelligence Platform
+        </footer>
+    </main>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true, offset: 50, easing: 'ease-out-quad' });
+        lucide.createIcons();
+
+        // Mobile Menu Toggle Logic
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const sidebar = document.getElementById('sidebar');
+        let isOpen = false;
+
+        mobileToggle.addEventListener('click', () => {
+            isOpen = !isOpen;
+            if (isOpen) {
+                sidebar.classList.remove('-translate-x-full');
+                mobileToggle.innerHTML = '<i data-lucide="x" class="w-6 h-6 text-white"></i>';
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                mobileToggle.innerHTML = '<i data-lucide="menu" class="w-6 h-6 text-white"></i>';
+            }
+            lucide.createIcons();
+        });
+
+        // =========================================================
+        // 🔔 NOTIFICATION OVERLAY LOGIC
+        // =========================================================
+        const notificationBtn = document.getElementById('notification-btn');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        const notificationDot = document.getElementById('notification-dot');
+        const markReadBtn = document.getElementById('mark-read-btn');
+
+        notificationBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = notificationDropdown.classList.contains('hidden');
+            if (isHidden) {
+                notificationDropdown.classList.remove('hidden');
+                setTimeout(() => {
+                    notificationDropdown.classList.remove('scale-95', 'opacity-0');
+                    notificationDropdown.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            } else {
+                closeDropdown();
+            }
+        });
+
+        markReadBtn.addEventListener('click', () => {
+            if(notificationDot) notificationDot.remove();
+            notificationDropdown.querySelector('ul').innerHTML = `
+                <div class="text-center py-6 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+                    No pending intelligence notifications.
+                </div>
+            `;
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!notificationDropdown.contains(e.target) && e.target !== notificationBtn) {
+                closeDropdown();
+            }
+        });
+
+        function closeDropdown() {
+            notificationDropdown.classList.remove('scale-100', 'opacity-100');
+            notificationDropdown.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { notificationDropdown.classList.add('hidden'); }, 200);
+        }
+
+        // =========================================================
+        // ASYNC PIPELINE CONNECTION HANDLER
+        // =========================================================
+        document.getElementById('resumeUploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let fileInput = document.getElementById('resumeFileInput');
+            if (fileInput.files.length === 0) return;
+            
+            let formData = new FormData();
+            formData.append('resume', fileInput.files[0]);
+            
+            document.getElementById('salaryDisplay').innerText = "Processing...";
+            document.getElementById('scoreDisplay').innerText = "---";
+            
+            fetch('/upload-resume', { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Analysis Failure Check: " + data.error);
+                    return;
+                }
+                document.getElementById('salaryDisplay').innerText = data.salary;
+                document.getElementById('salaryTrend').innerHTML = `<i data-lucide="sparkles" class="w-3 h-3 mr-1 text-indigo-400"></i> Optimized AI Target Range`;
+                
+                document.getElementById('scoreDisplay').innerText = data.resume_score + "%";
+                document.getElementById('scoreProgressBar').style.width = data.resume_score + "%";
+                
+                if (data.resume_score >= 80) {
+                    document.getElementById('matchLabel').innerText = "Strong Match";
+                } else if (data.resume_score >= 60) {
+                    document.getElementById('matchLabel').innerText = "Moderate Match";
+                } else {
+                    document.getElementById('matchLabel').innerText = "Needs Optimization";
+                }
+                
+                if (data.job_matches) {
+                    document.getElementById('opportunitiesCount').innerText = data.job_matches.length;
+                }
+                
+                let feedbackContainer = document.getElementById('feedbackContainerList');
+                feedbackContainer.innerHTML = '';
+                data.feedback.forEach(item => {
+                    let li = document.createElement('li');
+                    li.className = "p-4 bg-indigo-600/5 rounded-2xl border border-indigo-500/10 text-xs text-slate-300 leading-relaxed font-semibold flex items-start";
+                    li.innerHTML = `<i data-lucide="arrow-right-circle" class="w-4 h-4 text-indigo-400 mr-3 flex-shrink-0 mt-0.5"></i> <span>${item}</span>`;
+                    feedbackContainer.appendChild(li);
+                });
+                
+                let tableBody = document.getElementById('jobMatchesTableBody');
+                tableBody.innerHTML = '';
+                data.job_matches.forEach(job => {
+                    let row = document.createElement('tr');
+                    row.className = "hover:bg-white/[0.02] transition-colors";
+                    row.innerHTML = `
+                        <td class="py-4 font-bold text-white flex items-center">
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 text-emerald-400 mr-3"></i> ${job.title}
+                        </td>
+                        <td class="py-4 text-slate-400 font-medium">${job.company}</td>
+                        <td class="py-4 text-end font-black text-emerald-400">${job.match}% Match</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                lucide.createIcons();
+            })
+            .catch(error => {
+                console.error("Pipeline Error Context:", error);
+                document.getElementById('salaryDisplay').innerText = "Error";
+            });
+        });
+    </script>
+</body>
+</html>

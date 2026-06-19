@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | CareerCompass</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- AOS (Animate on Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+            /* Dark gray-900 fallback */
+            /* Using a darker linear-gradient overlay for better contrast */
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.92) 0%, rgba(79, 70, 229, 0.4) 100%),
+                url('image_f9bb45.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            /* Changed to auto to allow scrolling if content overflows */
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .glassmorphism {
+            background: rgba(17, 24, 39, 0.6);
+            /* Darker base for high contrast text */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #6366f1;
+            /* Indigo-500 */
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+            outline: none;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(90deg, #6366f1, #4f46e5);
+            /* Indigo gradient matching homepage */
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.4);
+            filter: brightness(1.1);
+        }
+
+        /* Floating background shapes for "Lively" feel */
+        .shape {
+            position: absolute;
+            z-index: -1;
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 12s infinite alternate ease-in-out;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(60px, 80px) scale(1.1);
+            }
+        }
+    </style>
+</head>
+
+<body class="text-white">
+
+    <!-- Decorative shapes -->
+    <div class="shape bg-indigo-600 w-80 h-80 -top-20 -left-20"></div>
+    <div class="shape bg-purple-700 w-96 h-96 -bottom-32 -right-32" style="animation-delay: -6s;"></div>
+
+    <!-- Header -->
+    <header class="fixed w-full top-0 z-50 py-6 glassmorphism border-b border-white/5">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="my_project.html" class="text-2xl font-black tracking-tighter" data-aos="fade-down">
+                CareerCompass
+            </a>
+            <a href="my_project.html" class="text-sm font-semibold text-indigo-300 hover:text-white transition"
+                data-aos="fade-down">
+                ← Back to Home
+            </a>
+        </div>
+    </header>
+
+    <!-- Login Content -->
+    <!-- Changed items-center to items-start and added padding top to shift box down -->
+    <main class="flex-grow flex items-start justify-center px-6 pt-32 pb-12">
+        <div class="w-full max-w-md mt-10" data-aos="zoom-in" data-aos-duration="800">
+            <div class="glassmorphism rounded-[2.5rem] p-10 md:p-12">
+                <div class="text-center mb-10">
+                    <h1 class="text-4xl font-black mb-3 tracking-tight">Welcome Back</h1>
+                    <p class="text-gray-400 font-medium">Log in to manage your career path.</p>
+                </div>
+
+                <form id="loginForm" class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-widest text-indigo-300 ml-1">Email
+                            Address</label>
+                        <input type="email" placeholder="name@example.com" required
+                            class="w-full px-6 py-4 rounded-2xl input-field placeholder-white/20">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center ml-1">
+                            <label class="text-xs font-bold uppercase tracking-widest text-indigo-300">Password</label>
+                            <a href="#"
+                                class="text-xs text-indigo-400 hover:text-white transition font-semibold">Forgot?</a>
+                        </div>
+                        <input type="password" placeholder="••••••••" required
+                            class="w-full px-6 py-4 rounded-2xl input-field placeholder-white/20">
+                    </div>
+
+                    <div class="flex items-center space-x-3 ml-1">
+                        <input type="checkbox" id="remember"
+                            class="w-4 h-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-500">
+                        <label for="remember" class="text-sm text-gray-300 cursor-pointer select-none">Remember
+                            me</label>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 rounded-2xl btn-gradient font-extrabold text-lg shadow-lg">
+                        Sign In
+                    </button>
+                </form>
+
+                <div class="mt-10">
+                    <div class="relative flex items-center mb-8">
+                        <div class="flex-grow border-t border-white/5"></div>
+                        <span class="flex-shrink mx-4 text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em]">Or
+                            Secure Login</span>
+                        <div class="flex-grow border-t border-white/5"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button
+                            class="flex items-center justify-center py-3.5 px-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition group">
+                            <img src="https://www.svgrepo.com/show/475656/google-color.svg"
+                                class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" alt="Google">
+                            <span class="text-xs font-bold uppercase tracking-wider">Google</span>
+                        </button>
+                        <button
+                            class="flex items-center justify-center py-3.5 px-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition group">
+                            <img src="https://www.svgrepo.com/show/475661/linkedin-color.svg"
+                                class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" alt="LinkedIn">
+                            <span class="text-xs font-bold uppercase tracking-wider">LinkedIn</span>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-center mt-12 text-gray-500 text-sm font-medium">
+                    New to CareerCompass?
+                    <a href="signUpPage.html"
+                        class="text-indigo-400 font-bold hover:text-indigo-300 transition underline underline-offset-4">Sign
+                        up free</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-[10px] font-bold uppercase tracking-widest text-gray-600 mt-auto">
+        <p>&copy; 2026 CareerCompass • Secure AES-256 Encryption</p>
+    </footer>
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            duration: 1000
+        });
+
+        // Locate the submit listener inside templates/loginPage.html and replace it:
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const inputs = e.target.querySelectorAll('input');
+            const email = inputs[0].value;
+            const password = inputs[1].value;
+
+            const btn = e.target.querySelector('button');
+            btn.disabled = true;
+            btn.innerHTML = `<span>Verifying Session...</span>`;
+
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        // Success shifts authorization context right onto the core authenticated root layout view
+                        window.location.href = "/my_project";
+                    } else {
+                        alert("Login Failed: " + data.error);
+                        btn.disabled = false;
+                        btn.innerHTML = "Sign In";
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    btn.disabled = false;
+                    btn.innerHTML = "Sign In";
+                });
+        });
+    </script>
+</body>
+
+</html>

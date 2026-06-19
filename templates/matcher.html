@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Matcher | CareerCompass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            --bg-deep: #020617;
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --border-glow: rgba(255, 255, 255, 0.08);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+        .glassmorphism {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+        }
+        .sidebar-item {
+            transition: all 0.3s ease;
+            color: #94a3b8;
+        }
+        .sidebar-item:hover, .sidebar-item.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #a7f3d0;
+        }
+        /* Custom smooth transition for slide-out drawer panels */
+        .drawer-transition {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="flex overflow-x-hidden">
+
+    <aside class="sidebar w-72 fixed h-full glassmorphism border-r border-white/5 hidden lg:block">
+        <div class="p-10">
+            <h1 class="text-2xl font-black tracking-tighter text-white">CareerCompass</h1>
+        </div>
+        <nav class="mt-4 px-6 space-y-2">
+            <a href="/homePage" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Overview</span>
+            </a>
+            <a href="/predictor" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="trending-up" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Salary Predictor</span>
+            </a>
+            <a href="/matcher" class="sidebar-item active flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="briefcase" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Job Matcher</span>
+            </a>
+            <a href="/analyzer" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="file-text" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Resume Analyzer</span>
+            </a>
+            <a href="/trends" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="users" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Market Trends</span>
+            </a>
+        </nav>
+
+        <div class="absolute bottom-10 left-0 w-full px-6 space-y-2">
+            <a href="settings.html" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="settings" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Settings</span>
+            </a>
+            <a href="/api/auth/logout" class="sidebar-item flex items-center px-4 py-4 rounded-2xl text-red-400/80 hover:text-red-400 hover:bg-red-400/5">
+                <i data-lucide="log-out" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-grow lg:ml-72 min-h-screen p-8 lg:p-12 pb-24">
+        
+        <header class="mb-12">
+            <h2 class="text-emerald-400 font-black uppercase tracking-[0.2em] text-[10px] mb-2">Algorithmic Vector Search Space</h2>
+            <h3 class="text-4xl font-black tracking-tight text-white">Profile Alignment Matcher</h3>
+        </header>
+
+        <div class="glassmorphism p-6 rounded-3xl border border-white/5 shadow-xl mb-10 space-y-4">
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-black uppercase tracking-wider text-slate-400">Core Domain Competencies</label>
+                <div id="tagEngineContainer" class="w-full bg-slate-950/40 border border-white/5 rounded-2xl p-3 flex flex-wrap gap-2 items-center min-h-[56px] focus-within:border-emerald-500 transition-colors">
+                    <input type="text" id="skillInputHook" placeholder="Type a skill and hit Enter or Comma..." 
+                        class="bg-transparent text-sm text-white focus:outline-none flex-grow min-w-[200px] p-1">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2 border-t border-white/5 items-center">
+                <div>
+                    <div class="flex justify-between text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                        <span>Minimum Match Scale</span>
+                        <span id="sliderValueText" class="text-emerald-400">60%</span>
+                    </div>
+                    <input type="range" id="matchThresholdSlider" min="60" max="95" value="60" 
+                        class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Job Arrangement Model</label>
+                    <select id="jobTypeFilter" class="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        <option value="All">All Classifications</option>
+                        <option value="Full-time">Full-time Roles</option>
+                        <option value="Remote">Remote Only</option>
+                        <option value="Internship">Internship Tracks</option>
+                    </select>
+                </div>
+
+                <button id="triggerMatchCalculationBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs tracking-widest uppercase py-4 rounded-xl transition-all shadow-lg shadow-emerald-900/20 whitespace-nowrap h-fit mt-auto">
+                    Calculate Vector Proximity
+                </button>
+            </div>
+        </div>
+
+        <div class="glassmorphism p-8 rounded-[2.5rem] border border-white/5 shadow-2xl">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h4 class="text-xl font-black text-white flex items-center">
+                        <i data-lucide="git-merge" class="w-5 h-5 text-emerald-400 mr-3"></i> Top Ranked Alignments
+                    </h4>
+                </div>
+                <span class="text-[10px] bg-emerald-500/10 text-emerald-400 font-black uppercase px-3 py-1 rounded-lg tracking-wider">Cosine Engine Live</span>
+            </div>
+
+            <div id="jobMatchesGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div class="p-6 bg-slate-900/30 border border-white/5 rounded-3xl text-center md:col-span-3 py-16">
+                    <div class="w-16 h-16 bg-slate-800/50 text-slate-500 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/5">
+                        <i data-lucide="database-zap" class="w-8 h-8"></i>
+                    </div>
+                    <h5 class="text-white font-bold mb-1">No Active Proximity Vector Parsed</h5>
+                    <p class="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">Add targeted skillset badges above to query spatial similarity coordinates across database layers.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="insightsDrawerOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] hidden opacity-0 transition-opacity duration-300">
+        <aside id="insightsDrawerSidePanel" class="fixed right-0 top-0 h-full w-full max-w-md bg-slate-900/95 border-l border-white/10 p-8 shadow-2xl z-[101] drawer-transition translate-x-full overflow-y-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h4 class="text-lg font-black text-white flex items-center">
+                    <i data-lucide="terminal" class="w-5 h-5 text-indigo-400 mr-3"></i> Core Match Insights
+                </h4>
+                <button id="closeDrawerBtn" class="p-2 bg-white/5 rounded-xl hover:bg-white/10 text-slate-400 transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <div class="p-6 bg-slate-950/50 border border-white/5 rounded-2xl text-center">
+                    <h5 id="drawerJobTitle" class="text-base font-bold text-white mb-1">Designation</h5>
+                    <p id="drawerCompany" class="text-xs text-slate-400 mb-4">Company Name</p>
+                    <div class="inline-block bg-emerald-500/10 text-emerald-400 text-xs font-black px-4 py-2 rounded-xl" id="drawerScoreBadge">0% Alignment Match</div>
+                </div>
+
+                <div>
+                    <h6 class="text-xs font-black uppercase tracking-wider text-slate-400 mb-3 flex items-center">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400 mr-2"></i> Overlapping Skill Footprint
+                    </h6>
+                    <div id="drawerMatchedSkills" class="flex flex-wrap gap-2 text-xs text-emerald-300 font-semibold">
+                        </div>
+                </div>
+
+                <div class="pt-4 border-t border-white/5">
+                    <button class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs uppercase tracking-widest rounded-xl shadow-lg shadow-indigo-900/40">
+                        Initiate Instant One-Click Application
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // 1. Core State Array Tracking Active Skill Tag Pills
+        let activeSkillsTags = ['python', 'git']; // pre-populated defaults
+        const tagContainer = document.getElementById('tagEngineContainer');
+        const skillInput = document.getElementById('skillInputHook');
+        
+        // Render current array state to UI badges
+        function redrawSkillPillBadges() {
+            // Remove old tags except the native input element node box
+            const existingPills = tagContainer.querySelectorAll('.skill-pill-badge');
+            existingPills.forEach(pill => pill.remove());
+            
+            activeSkillsTags.forEach(skill => {
+                let pill = document.createElement('span');
+                pill.className = "skill-pill-badge bg-emerald-600/10 text-emerald-300 border border-emerald-500/20 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-2 shadow-sm animate-zoomIn";
+                pill.innerHTML = `${skill.toUpperCase()} <i data-lucide="x" class="w-3 h-3 cursor-pointer opacity-60 hover:opacity-100 remove-tag-hook" data-skill="${skill}"></i>`;
+                tagContainer.insertBefore(pill, skillInput);
+            });
+            lucide.createIcons();
+        }
+
+        // Key interception logic to turn string characters into array pill items
+        skillInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                let cleanVal = skillInput.value.trim().toLowerCase().replace(/,/g, '');
+                if (cleanVal && !activeSkillsTags.includes(cleanVal)) {
+                    activeSkillsTags.push(cleanVal);
+                    skillInput.value = '';
+                    redrawSkillPillBadges();
+                }
+            }
+        });
+
+        // Event delegation hook to drop single items from active tracking arrays
+        tagContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-tag-hook') || e.target.parentElement.classList.contains('remove-tag-hook')) {
+                let hook = e.target.closest('.remove-tag-hook');
+                let targetSkill = hook.getAttribute('data-skill');
+                activeSkillsTags = activeSkillsTags.filter(s => s !== targetSkill);
+                redrawSkillPillBadges();
+            }
+        });
+
+        // Threshold Slider Visual Synchronization
+        const slider = document.getElementById('matchThresholdSlider');
+        slider.addEventListener('input', function() {
+            document.getElementById('sliderValueText').innerText = slider.value + "%";
+        });
+
+        // 2. Main Analytics Form Execution Request
+        document.getElementById('triggerMatchCalculationBtn').addEventListener('click', function() {
+            if (activeSkillsTags.length === 0) {
+                alert("Please append at least one skill capability tag pill metric.");
+                return;
+            }
+            
+            let resultsGrid = document.getElementById('jobMatchesGrid');
+            let selectedMinScore = parseInt(slider.value);
+            
+            resultsGrid.innerHTML = `
+                <div class="p-6 text-center md:col-span-3 py-16 animate-pulse">
+                    <p class="text-sm text-slate-400 font-bold">Computing Cosine Proximity Alignments...</p>
+                </div>
+            `;
+            
+            fetch('/api/job-matcher-search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ skills: activeSkillsTags })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Filter records according to client-side thresholds
+                let filteredData = data.filter(job => job.match >= selectedMinScore);
+                
+                if (filteredData.length === 0) {
+                    resultsGrid.innerHTML = `<div class="p-6 text-center md:col-span-3 text-slate-500 text-xs font-bold py-12">No vector combinations exceeded a matching score of ${selectedMinScore}%. Try lowering thresholds or expanding input tags.</div>`;
+                    return;
+                }
+                
+                resultsGrid.innerHTML = '';
+                
+                filteredData.forEach(job => {
+                    let card = document.createElement('div');
+                    card.className = "p-6 bg-slate-900/30 hover:bg-slate-800/40 border border-white/5 hover:border-emerald-500/30 rounded-3xl transition-all duration-300 flex flex-col justify-between group cursor-pointer job-click-card";
+                    // Embed object tracking criteria straight into html parameters
+                    card.setAttribute('data-title', job.title);
+                    card.setAttribute('data-company', job.company);
+                    card.setAttribute('data-match', job.match);
+                    
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex justify-between items-start mb-4">
+                                <h5 class="text-base font-bold text-white group-hover:text-emerald-400 transition-colors pr-2">${job.title}</h5>
+                                <span class="bg-emerald-500/10 text-emerald-400 text-[11px] font-black px-3 py-1 rounded-xl whitespace-nowrap shadow-sm">
+                                    ${job.match}% Match
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-400 font-semibold mb-1 flex items-center">
+                                <i data-lucide="building-2" class="w-3.5 h-3.5 mr-2 text-slate-500"></i> ${job.company}
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-[10px] text-slate-400 font-black uppercase tracking-wider flex items-center text-emerald-400/80">
+                                <i data-lucide="zap" class="w-3 h-3 mr-1"></i> View Match Breakdown
+                            </span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-slate-700 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-all"></i>
+                        </div>
+                    `;
+                    resultsGrid.appendChild(card);
+                });
+                lucide.createIcons();
+            });
+        });
+
+        // 3. Side Drawer Opening/Closing UI Orchestration Core
+        const overlay = document.getElementById('insightsDrawerOverlay');
+        const sidePanel = document.getElementById('insightsDrawerSidePanel');
+
+        function openBreakdownDrawer(title, company, match) {
+            document.getElementById('drawerJobTitle').innerText = title;
+            document.getElementById('drawerCompany').innerText = company;
+            document.getElementById('drawerScoreBadge').innerText = `${match}% Compatibility Match`;
+            
+            // Highlight terms intersecting with current active array tags
+            let matchingBadgeContainer = document.getElementById('drawerMatchedSkills');
+            matchingBadgeContainer.innerHTML = '';
+            activeSkillsTags.forEach(skill => {
+                let badge = document.createElement('span');
+                badge.className = "px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg";
+                badge.innerText = skill.toUpperCase();
+                matchingBadgeContainer.appendChild(badge);
+            });
+
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.add('opacity-100');
+                sidePanel.classList.remove('translate-x-full');
+            }, 50);
+        }
+
+        function closeBreakdownDrawer() {
+            sidePanel.classList.add('translate-x-full');
+            overlay.classList.remove('opacity-100');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 400);
+        }
+
+        // Catch runtime clicks on newly drawn grid cards
+        document.getElementById('jobMatchesGrid').addEventListener('click', function(e) {
+            let card = e.target.closest('.job-click-card');
+            if (card) {
+                openBreakdownDrawer(
+                    card.getAttribute('data-title'),
+                    card.getAttribute('data-company'),
+                    card.getAttribute('data-match')
+                );
+            }
+        });
+
+        document.getElementById('closeDrawerBtn').addEventListener('click', closeBreakdownDrawer);
+        overlay.addEventListener('click', function(e) {
+            if(e.target === overlay) closeBreakdownDrawer();
+        });
+
+        // Prime default visual layers
+        redrawSkillPillBadges();
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Settings | CareerCompass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-deep: #020617;
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --border-glow: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            min-height: 100vh;
+            color: #f8fafc;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(147, 51, 234, 0.06) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.06) 0px, transparent 50%);
+        }
+
+        .glassmorphism {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+        }
+
+        .sidebar-item {
+            transition: all 0.3s ease;
+            color: #94a3b8;
+        }
+
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background: rgba(147, 51, 234, 0.12);
+            color: #e9d5ff;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+
+<body class="flex">
+
+    <aside class="sidebar w-72 fixed h-full glassmorphism border-r border-white/5 hidden lg:block">
+        <div class="p-10">
+            <h1 class="text-2xl font-black tracking-tighter text-white">CareerCompass</h1>
+        </div>
+        <nav class="mt-4 px-6 space-y-2">
+            <a href="/homePage" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Overview</span>
+            </a>
+            <a href="/predictor" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="trending-up" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Salary Predictor</span>
+            </a>
+            <a href="/matcher" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="briefcase" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Job Matcher</span>
+            </a>
+            <a href="/analyzer" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="file-text" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Resume Analyzer</span>
+            </a>
+            <a href="/trends" class="sidebar-item flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="users" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Market Trends</span>
+            </a>
+        </nav>
+
+        <div class="absolute bottom-10 left-0 w-full px-6 space-y-2">
+            <a href="/settings" class="sidebar-item active flex items-center px-4 py-4 rounded-2xl">
+                <i data-lucide="settings" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Settings</span>
+            </a>
+            <a href="/welcome"
+                class="sidebar-item flex items-center px-4 py-4 rounded-2xl text-red-400/80 hover:text-red-400 hover:bg-red-400/5">
+                <i data-lucide="log-out" class="w-5 h-5 mr-4"></i>
+                <span class="font-bold text-xs tracking-widest uppercase">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-grow lg:ml-72 min-h-screen p-8 lg:p-12 pb-24">
+
+        <header class="mb-12">
+            <h2 class="text-purple-400 font-black uppercase tracking-[0.2em] text-[10px] mb-2">System Preferences & Personal Preferences</h2>
+            <h3 class="text-4xl font-black tracking-tight text-white">Workspace Settings</h3>
+        </header>
+
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-8 items-start">
+
+            <div class="xl:col-span-1 glassmorphism p-4 rounded-2xl space-y-1">
+                <button onclick="switchTab('account')" id="btn-account"
+                    class="w-full flex items-center px-4 py-3.5 rounded-xl bg-purple-600/10 text-purple-300 font-bold transition text-xs tracking-wider uppercase">
+                    <i data-lucide="user-check" class="mr-3 w-4 h-4"></i> Profile Settings
+                </button>
+                <button onclick="switchTab('models')" id="btn-models"
+                    class="w-full flex items-center px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition text-xs tracking-wider text-left uppercase font-bold">
+                    <i data-lucide="cpu" class="mr-3 w-4 h-4"></i> Core Engine Info
+                </button>
+                <button onclick="switchTab('system')" id="btn-system"
+                    class="w-full flex items-center px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition text-xs tracking-wider text-left uppercase font-bold">
+                    <i data-lucide="sliders" class="mr-3 w-4 h-4"></i> Preferences
+                </button>
+            </div>
+
+            <div class="xl:col-span-3 space-y-8">
+
+                <!-- TAB: ACCOUNT DETAILS -->
+                <div id="tab-account" class="glassmorphism p-8 rounded-[2.5rem] shadow-2xl space-y-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-purple-600/20 text-purple-400 rounded-2xl flex items-center justify-center border border-purple-500/20">
+                            <i data-lucide="user" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-black text-white">Account Details</h4>
+                            <p class="text-xs text-slate-400 font-medium">Verify credentials captured during workspace deployment.</p>
+                        </div>
+                    </div>
+                    <hr class="border-white/5">
+
+                    <form class="space-y-5" onsubmit="saveAlert(event)">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Full Name</label>
+                                <input type="text" class="w-full bg-slate-950/40 border border-white/5 rounded-xl px-4 py-3.5 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors font-medium" value="{{ name }}" placeholder="e.g. John Doe">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Job Title</label>
+                                <input type="text" class="w-full bg-slate-950/40 border border-white/5 rounded-xl px-4 py-3.5 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors font-medium" value="{{ title }}" placeholder="e.g. Developer">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Email Address</label>
+                                <input type="email" class="w-full bg-slate-950/40 border border-white/5 rounded-xl px-4 py-3.5 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors font-medium" value="{{ email }}" placeholder="john@example.com">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Update Password</label>
+                                <input type="password" class="w-full bg-slate-950/40 border border-white/5 rounded-xl px-4 py-3.5 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors font-mono tracking-widest" placeholder="••••••••">
+                                <span class="block text-[10px] text-slate-500 mt-2">Must be at least 8 characters long.</span>
+                            </div>
+                        </div> <!-- FIXED: Added missing closing div for grid setup layout -->
+
+                        <div class="pt-4 border-t border-white/5 flex justify-end">
+                            <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white font-black text-xs tracking-widest uppercase px-8 py-4 rounded-xl transition-all shadow-lg shadow-purple-950/50">
+                                Save Profile Adjustments
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- TAB: ML CORE ENGINE INFO -->
+                <div id="tab-models" class="glassmorphism p-8 rounded-[2.5rem] shadow-2xl space-y-6 hidden">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-purple-600/20 text-purple-400 rounded-2xl flex items-center justify-center border border-purple-500/20">
+                            <i data-lucide="cpu" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-black text-white">ML Core Architectures</h4>
+                            <p class="text-xs text-slate-400 font-medium">Active algorithmic pipeline vectors loaded in memory framework.</p>
+                        </div>
+                    </div>
+                    <hr class="border-white/5">
+                    <div class="space-y-4">
+                        <div class="p-5 bg-slate-950/30 border border-white/5 rounded-2xl flex justify-between items-center">
+                            <div>
+                                <span class="text-xs font-bold text-white block">Market Momentum Forecaster</span>
+                                <span class="text-[10px] text-slate-400">RandomForestRegressor (Test R²: 0.82) Active Pipeline</span>
+                            </div>
+                            <span class="text-[10px] bg-purple-500/10 text-purple-300 border border-purple-500/20 px-3 py-1 rounded-lg font-mono font-bold">ACTIVE</span>
+                        </div>
+                        <div class="p-5 bg-slate-950/30 border border-white/5 rounded-2xl flex justify-between items-center">
+                            <div>
+                                <span class="text-xs font-bold text-white block">Profile Processing Layer</span>
+                                <span class="text-[10px] text-slate-400">TF-IDF Word Token Matching Matrix with Cosine Angle Distances</span>
+                            </div>
+                            <span class="text-[10px] bg-purple-500/10 text-purple-300 border border-purple-500/20 px-3 py-1 rounded-lg font-mono font-bold">READY</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: PREFERENCES -->
+                <div id="tab-system" class="glassmorphism p-8 rounded-[2.5rem] shadow-2xl space-y-6 hidden">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-purple-600/20 text-purple-400 rounded-2xl flex items-center justify-center border border-purple-500/20">
+                            <i data-lucide="sliders" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-black text-white">Preferences</h4>
+                            <p class="text-xs text-slate-400 font-medium">Configure global client display modes and pipeline notifications.</p>
+                        </div>
+                    </div>
+                    <hr class="border-white/5">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-slate-950/20 border border-white/5 rounded-2xl">
+                            <div>
+                                <span class="text-xs font-bold text-white block">Live Market Marquee Ticker</span>
+                                <span class="text-[10px] text-slate-400">Enable real-time data marquee animations inside trends views.</span>
+                            </div>
+                            <input type="checkbox" checked class="w-4 h-4 accent-purple-500 cursor-pointer">
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-slate-950/20 border border-white/5 rounded-2xl">
+                            <div>
+                                <span class="text-xs font-bold text-white block">Server Log Verbosity</span>
+                                <span class="text-[10px] text-slate-400">Print diagnostic mathematical error codes directly in developer terminal.</span>
+                            </div>
+                            <input type="checkbox" class="w-4 h-4 accent-purple-500 cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        function switchTab(tabId) {
+            const tabs = ['account', 'models', 'system'];
+
+            tabs.forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`btn-${t}`).className = "w-full flex items-center px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition text-xs tracking-wider text-left uppercase font-bold";
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`btn-${tabId}`).className = "w-full flex items-center px-4 py-3.5 rounded-xl bg-purple-600/10 text-purple-300 font-bold transition text-xs tracking-wider text-left uppercase";
+        }
+
+        function saveAlert(e) {
+            e.preventDefault();
+            alert("Settings matrix adjustments written to state space storage safely!");
+        }
+    </script>
+</body>
+
+</html>
